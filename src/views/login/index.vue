@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
         <h1 class="login-title">Login</h1>
-        <form class="login-form" @submit.prevent="navigateToHome">
+        <div class="login-form" @keydown.enter.prevent="navigateToHome">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" placeholder="Enter your email" required />
@@ -10,18 +10,32 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password" required />
             </div>
-            <button type="submit" class="login-button">Login</button>
-        </form>
+            <button type="submit" class="login-button" @click="navigateToHome">Login</button>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/store/userStore';
+import axios from 'axios';
 
 const router = useRouter();
+const userStore = useUserStore();
 
-function navigateToHome() {
-    router.push('/home');
+async function navigateToHome() {
+    try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+
+        if (response.status === 200) {
+            router.push('/home');
+            userStore.setUser({ userId: response.data[0].id });
+            console.log(userStore.user.userId);
+        }
+
+    } catch (error) {
+        alert(error);
+    }
 }
 </script>
 

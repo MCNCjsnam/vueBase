@@ -1,26 +1,27 @@
 import { defineStore } from 'pinia';
+import { StoreState, UserInfo } from '@/types/store';
 
 export const useUserStore = defineStore('user', {
-    state: () => ({
-        user: null as any
+    state: (): StoreState => ({
+        userInfo: { userId: '' }
     }),
 
     getters: {
-        userName(): string {
-            return this.user?.userName || '';
+        userId(): string {
+            return this.userInfo?.userId || '';
         }
     },
 
     actions: {
-        setUser(user: any) {
-            this.user = user;
+        setUser(user: UserInfo) {
+            this.userInfo = user;
         },
         clearUser() {
-            this.user = null;
+            this.userInfo = { userId: '' };
         },
         logout() {
+            this.userInfo = { userId: '' };
             location.href = '/';
-            this.user = null;
         }
     }
 });
