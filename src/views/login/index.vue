@@ -30,7 +30,6 @@ async function navigateToHome() {
         if (response.status === 200) {
             router.push('/home');
             userStore.setUser({ userId: response.data[0].id });
-            console.log(userStore.user.userId);
         }
 
     } catch (error) {
